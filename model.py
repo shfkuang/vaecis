@@ -70,7 +70,7 @@ class ConvVAE(nn.Module):
         self.decoder = BernoulliDecoder(self.latent_dim, self.input_channel)
         self.prior = Normal(0,1)
 
-    def forward(self, input, K=20, mask = None):#input: [b,1,28,28]
+    def forward(self, input, K=20, mask = None,beta = 1):#input: [b,1,28,28]
         _mu, _log_var, _z, qzgivenx = self.encoder(input, K)#[K,b,latent_dim]
         log_pz = self.prior.log_prob(_z)#[K,b,latent_dim]
         log_qzgivenx = qzgivenx.log_prob(_z)
@@ -81,7 +81,7 @@ class ConvVAE(nn.Module):
         masked_log_pxgivenz = log_pxgivenz * mask.squeeze()#[K,b,28,28]
         batch_log_pxgivenz = torch.sum(masked_log_pxgivenz, axis=[2, 3]) # [K,b]
         
-        _bound = batch_log_pxgivenz - batch_kl
+        _bound = batch_log_pxgivenz - beta * batch_kl
         bound = torch.logsumexp(_bound, axis=0) - math.log(K)#由于前面对P和Q取了对数，故这里先取exp再相加再取log，这里是对K取平均，bound维数为b
         avg_iwae_bound = torch.mean(bound)#这里是对(batch)取平均
 

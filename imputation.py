@@ -110,6 +110,7 @@ with torch.no_grad():
     xfullfinal = img.squeeze()*mask+(1-mask)*final_imputations
     recon = xfullfinal.cpu().numpy()
 
+    # whole_dataset_imputations.extend(final_imputations)
 
 #%%
 whole_dataset_imputations = np.array(whole_dataset_imputations)

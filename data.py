@@ -19,6 +19,52 @@ def get_binarized_MNIST(DATASETS_DIR='./binarymnist', random_seed=0):
     test = lines_to_np_array(lines).astype('float32').reshape(-1,28,28)
     return train, valid, test
 
+def get_binarized_Omniglot(DATASETS_DIR='./data', random_seed=0):
+    from torchvision.datasets import Omniglot
+    from torchvision.transforms import transforms
+
+    image_size = 28
+    omtrain = Omniglot(
+        root=DATASETS_DIR,
+        background=True,
+        transform=transforms.Compose(
+            [
+                transforms.Grayscale(num_output_channels=1),
+                transforms.Resize([int(image_size), int(image_size)]),
+                transforms.ToTensor()
+            ]
+        ),
+        download=True,
+    )
+    omtest = Omniglot(
+        root=DATASETS_DIR,
+        background=False,
+        transform=transforms.Compose(
+            [
+                transforms.Grayscale(num_output_channels=1),
+                transforms.Resize([int(image_size), int(image_size)]),
+                transforms.ToTensor()
+            ]
+        ),
+        download=True,
+    )
+    train_size = len(omtrain)
+    data = np.zeros((train_size, 28, 28),dtype=float)
+    for i in range(train_size):
+        data[i,:,:]=np.array(omtrain[i][0][0])
+
+    val_size = len(omtest)
+    data_valid = np.zeros((val_size, 28, 28),dtype=float)
+    for i in range(val_size):
+        data_valid[i,:,:]=np.array(omtest[i][0][0])
+        
+        
+    data = data>=0.5
+    data_valid = data_valid>=0.5
+    train = data.astype(float)
+    valid = data_valid.astype(float)    
+    test = data_vali
+    return train, valid, test
 
 def create_mcar_mask(n_rows, n_columns, percentage_of_missingness=0.1, seed=0):
     np.random.seed(seed)
