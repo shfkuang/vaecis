@@ -16,4 +16,4 @@ model:VAEs的模型定义
 
 train:条件分布学习
 
-imputation:缺失数据填
+imputation:缺失数据填补
