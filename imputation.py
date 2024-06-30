@@ -110,56 +110,12 @@ with torch.no_grad():
     xfullfinal = img.squeeze()*mask+(1-mask)*final_imputations
     recon = xfullfinal.cpu().numpy()
 
-    # whole_dataset_imputations.extend(final_imputations)
 
 #%%
 whole_dataset_imputations = np.array(whole_dataset_imputations)
 print(whole_dataset_imputations.shape) # same shape as the original flatten vector
 
-# print(mask_train.flatten().shape)
-# missing_idx_trainset = np.where(mask_train.flatten()==0.)[0]
-# print(missing_idx_trainset[0:10])
-# true_values_missing_data = data.flatten()[missing_idx_trainset]
-# imputed_values = whole_dataset_imputations.flatten()[missing_idx_trainset]
-# print(missing_idx_trainset.shape)
-# print(true_values_missing_data.shape)
-# print(imputed_values.shape)
-# true_values_missing_data = torch.from_numpy(true_values_missing_data).int()
-# imputed_values = torch.from_numpy(imputed_values).int()
 
-# # now I can compute the accuracy
-# print('Accuracy')
-# print((true_values_missing_data == imputed_values).shape)
-# print(torch.sum(true_values_missing_data == imputed_values)/len(missing_idx_trainset))
-
-# print('F1 score')
-# from sklearn.metrics import f1_score
-# print(f1_score(true_values_missing_data, imputed_values))
-
-# #
-# #
-# # I can plot some imputations
-# n_examples = 64
-# zero_imputed_train = zero_imputed_train.flatten()
-# zero_imputed_train[missing_idx_trainset] = imputed_values
-# imputed_train = zero_imputed_train.reshape(50000,1,28,28)
-
-# # get some data
-# dataset_display = get_imputation(data, mask_train, missing_data_mask, 0.5)
-
-# dataset_display = dataset_display.reshape(-1,1,28,28)
-# data_with_missing_values = dataset_display[0:n_examples,:,:,:]
-# imputed_examples = imputed_train[0:n_examples,:,:,:]
-# data = data.reshape(-1,1,28,28)
-# true_examples = data[0:n_examples,:,:,:]
-
-# data_with_missing_values = torch.from_numpy(data_with_missing_values).float()
-# imputed_examples = torch.from_numpy(imputed_examples).float()
-# true_examples = torch.from_numpy(true_examples).float()
-
-# data_with_missing_values = utils.make_grid(data_with_missing_values)
-# imputed_examples = utils.make_grid(imputed_examples)
-# true_examples = utils.make_grid(true_examples)
 #%%
 import matplotlib.pyplot as plt
 # plt.imshow(whole_dataset_imputations[10].reshape(28,28), cmap='gray')
@@ -167,26 +123,3 @@ plt.imshow(recon[3], cmap='gray')
 plt.title('Images with missing data')
 plt.show()
 plt.close()
-
-# plt.imshow(imputed_examples[0], cmap='gray')
-# plt.title('Images imputed with single imputation')
-# # plt.show()
-# plt.close()
-
-# plt.imshow(true_examples[0], cmap='gray')
-# plt.title('True images in the training set')
-# # plt.show()
-# plt.close()
-
-
-# whole_dataset_imputations = torch.from_numpy(whole_dataset_imputations).float()
-# whole_dataset_imputations = whole_dataset_imputations.reshape(-1,1,28,28)
-# reconstruction = whole_dataset_imputations[0:n_examples,:,:,:]
-# reconstruction = utils.make_grid(reconstruction)
-
-# plt.imshow(reconstruction[0], cmap='gray')
-# plt.title('Reconstructions (Imputation of the whole images)')
-# plt.show()
-# plt.close()
-
-# %%
