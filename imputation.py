@@ -1,4 +1,4 @@
-#%% 对测试集进行缺失值填补
+#%% imputate the test data
 import numpy as np
 import torch
 from data import get_binarized_MNIST
