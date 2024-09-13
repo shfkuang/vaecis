@@ -82,8 +82,8 @@ class ConvVAE(nn.Module):
         batch_log_pxgivenz = torch.sum(masked_log_pxgivenz, axis=[2, 3]) # [K,b]
         
         _bound = batch_log_pxgivenz - beta * batch_kl
-        bound = torch.logsumexp(_bound, axis=0) - math.log(K)#由于前面对P和Q取了对数，故这里先取exp再相加再取log，这里是对K取平均，bound维数为b
-        avg_iwae_bound = torch.mean(bound)#这里是对(batch)取平均
+        bound = torch.logsumexp(_bound, axis=0) - math.log(K)
+        avg_iwae_bound = torch.mean(bound)
 
         _output_dict = {'q_mean': _mu,
                         'q_log_var': _log_var,
@@ -92,7 +92,7 @@ class ConvVAE(nn.Module):
                        # 'logits': _logits,
                         'output_dist': pxgivenz,
                         'kl': batch_kl,
-                        'likelihood': batch_log_pxgivenz,#这个是[K,b]维度
-                        'iwae_bound': avg_iwae_bound#这个是取batch似然取平均
+                        'likelihood': batch_log_pxgivenz,
+                        'iwae_bound': avg_iwae_bound
                         }
         return _output_dict
